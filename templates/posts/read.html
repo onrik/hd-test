@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="post">
+        <h3 class="post-title">{{ post.title }}</h3>
+        <div class="post-meta">
+            {{ post.author }} |
+            {{ post.create_date }}
+        </div>
+        <p class="post-text">
+            {{ post.text|linebreaks }}
+        </p>
+    </div>
+    <hr>
+    <h4>Комментарии</h4>
+    <div>
+        {% for comment in post.comments.all %}
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        {% if comment.author %}
+                            {{ comment.author }}
+                        {% else %}
+                            Аноним
+                        {% endif %}
+                        | {{ comment.create_date }}
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    {{ comment.text|linebreaks }}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <br>
+    <hr>
+
+    <h4>Добавить комментарий</h4>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group {% if form.errors %}has-error{% endif %} ">
+            <textarea class="form-control" rows="3" name="text"></textarea>
+            <input class="btn btn-info" type="submit" value="Отправить">
+        </div>
+    </form>
+{% endblock %}
